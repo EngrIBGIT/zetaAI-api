@@ -7,9 +7,9 @@ class User(database.Model):
 
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String(255), nullable=False)
-    conversations = relationship("Conversation", back_populates='conversation', uselist = False)
+    conversations = relationship("Conversation", back_populates='user', lazy="dynamic")
     created_at = database.Column(database.DateTime(timezone=True), server_default=func.now())
     updated_at = database.Column(database.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     def __repr__(self):
-        return f'<Users {self.id}>'
+        return f'<User {self.id}>'

@@ -1,3 +1,4 @@
-from .user import User, Conversation
+from .user import User
+from .conversation import Conversation
 
 __all__ = ['User', 'Conversation']
