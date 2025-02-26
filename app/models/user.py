@@ -1,4 +1,5 @@
 from ..extensions.database import database
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 class User(database.Model):
@@ -6,7 +7,7 @@ class User(database.Model):
 
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String(255), nullable=False)
-    conversations = database.Column(database.String(255), nullable=True)
+    conversations = relationship("Conversation", back_populates='conversation', uselist = False)
     created_at = database.Column(database.DateTime(timezone=True), server_default=func.now())
     updated_at = database.Column(database.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
