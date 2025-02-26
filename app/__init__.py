@@ -1,13 +1,11 @@
+from .error_handler import register_error_handlers
+from .controllers import routes_blueprint
 from dotenv import load_dotenv
 from flask_cors import CORS
-from flask import Flask 
-from .constants import *
-from .extensions import *
 from .config import Config
-
-from .error_handler import register_error_handlers
-
-
+from .extensions import *
+from .constants import *
+from flask import Flask 
 
 load_dotenv()
 
