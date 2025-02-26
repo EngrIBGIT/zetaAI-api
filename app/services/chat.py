@@ -6,10 +6,13 @@ from app.constants import SUCCESS_MESSAGE
 from app.enums.custom_status_code import CustomStatusCode
 from app.helpers import add_record_to_database, create_response
 from app.models.conversation import Conversation
+from langchain.prompts import PromptTemplate
+
 
 
 def start_chat(user_id, message, character):
     memory = ConversationBufferMemory(return_messages=True)
+
     memory.chat_memory.add_message(SystemMessage(content=f"You are a {character}, engage this user in a conversation"))
 
     langchain_conversation = ConversationChain(llm=fetch_llm(), memory=memory)
@@ -18,14 +21,14 @@ def start_chat(user_id, message, character):
     user_conversation = Conversation(
         user_id=user_id,
         title="New Chat",
-        memory=[msg.model_dump() for msg in memory.chat_memory.messages]
+        memory={0: memory}
     )
 
     add_record_to_database(user_conversation)
 
     response = {"conversation_id": user_conversation.id, "ai_response": ai_response}
 
-    return create_response(CustomStatusCode.SUCCESS.value, SUCCESS_MESSAGE, response), 200
+    return response
 
 def fetch_llm():
     llm = ChatGroq(
@@ -37,3 +40,14 @@ def fetch_llm():
     )
 
     return llm
+
+def fetch_prompt_template(character):
+    return PromptTemplate(
+        input_variables=["history", "input"],
+        template=(
+            f"System: You are a {character}, engage this user in a conversation\n\n"
+            "The following is a conversation between User and AI:\n\n"
+            "{history}\n\n"
+            "User: {input}\nAI:"
+        )
+    )
