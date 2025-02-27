@@ -1,4 +1,4 @@
-from .extensions.database import database
+from .extensions.database import database, session
 from flask import abort, jsonify
 
 
@@ -10,18 +10,18 @@ def is_valid_number(value):
 
 def add_record_to_database(record):
     try:
-        database.session.add(record)
-        database.session.commit()
+        session.add(record)
+        session.commit()
     except Exception as e:
         print(e)
         database.session.rollback()
 
 def add_records_to_database(records):
     try:
-        database.session.add_all(records)
-        database.session.commit()
+        session.add_all(records)
+        session.commit()
     except Exception as e:
-        database.session.rollback()
+        session.rollback()
 
     
 def create_response(status: bool, message: str, data=None):
