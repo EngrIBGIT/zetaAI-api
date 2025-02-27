@@ -30,7 +30,7 @@ def prompt_bot(request: MessageRequest):
     user = get_user_by_username(request['username'])
 
     if user is None:
-        raise abort(400, "User not found")
+        raise abort(404, "User not found")
 
     chat_memory = user.serialize()['chat_memory']
 
